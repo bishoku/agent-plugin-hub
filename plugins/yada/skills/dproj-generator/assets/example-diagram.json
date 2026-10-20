@@ -1,0 +1,411 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "n-client",
+        "type": "client",
+        "name": "Web Client"
+      },
+      {
+        "id": "n-gw",
+        "type": "gateway",
+        "name": "API Gateway"
+      },
+      {
+        "id": "s-core",
+        "type": "section",
+        "name": "Core Domain"
+      },
+      {
+        "id": "n-order",
+        "type": "server",
+        "name": "Order Service",
+        "parentId": "s-core"
+      },
+      {
+        "id": "n-pay",
+        "type": "server",
+        "name": "Payment Service",
+        "parentId": "s-core"
+      },
+      {
+        "id": "s-data",
+        "type": "section",
+        "name": "Data Layer"
+      },
+      {
+        "id": "n-db",
+        "type": "database",
+        "name": "PostgreSQL",
+        "parentId": "s-data"
+      },
+      {
+        "id": "n-cache",
+        "type": "cache",
+        "name": "Redis",
+        "parentId": "s-data"
+      },
+      {
+        "id": "n-bus",
+        "type": "queue",
+        "name": "Kafka"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "n-client",
+        "targetId": "n-gw",
+        "isAsync": false,
+        "protocol": "HTTPS",
+        "description": "User Request"
+      },
+      {
+        "id": "e2",
+        "sourceId": "n-gw",
+        "targetId": "n-order",
+        "isAsync": false,
+        "protocol": "gRPC",
+        "description": "CreateOrder"
+      },
+      {
+        "id": "e3",
+        "sourceId": "n-order",
+        "targetId": "n-db",
+        "isAsync": false,
+        "protocol": "SQL",
+        "description": "INSERT order"
+      },
+      {
+        "id": "e4",
+        "sourceId": "n-order",
+        "targetId": "n-cache",
+        "isAsync": false,
+        "protocol": "Redis",
+        "description": "Cache order"
+      },
+      {
+        "id": "e5",
+        "sourceId": "n-order",
+        "targetId": "n-bus",
+        "isAsync": true,
+        "protocol": "Kafka",
+        "description": "OrderCreated"
+      },
+      {
+        "id": "e6",
+        "sourceId": "n-bus",
+        "targetId": "n-pay",
+        "isAsync": true,
+        "protocol": "Kafka",
+        "description": "ProcessPayment"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s2",
+        "stepNumber": 2,
+        "edgeId": "e2",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s3",
+        "stepNumber": 3,
+        "edgeId": "e3",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s4",
+        "stepNumber": 3,
+        "edgeId": "e4",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s5",
+        "stepNumber": 4,
+        "edgeId": "e5",
+        "isAsync": true
+      },
+      {
+        "id": "s6",
+        "stepNumber": 5,
+        "edgeId": "e6",
+        "isAsync": true
+      }
+    ]
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 80,
+        "y": 60
+      },
+      "gridVisible": true
+    },
+    "layoutNodes": {
+      "n-client": {
+        "id": "n-client",
+        "x": 0,
+        "y": 120,
+        "width": 224,
+        "height": 52,
+        "theme": "indigo",
+        "customStyles": {
+          "productIcon": "chrome",
+          "productIconColored": true
+        }
+      },
+      "n-gw": {
+        "id": "n-gw",
+        "x": 350,
+        "y": 120,
+        "width": 224,
+        "height": 52,
+        "theme": "emerald",
+        "customStyles": {
+          "productIcon": "nginx",
+          "productIconColored": true
+        }
+      },
+      "s-core": {
+        "id": "s-core",
+        "x": 680,
+        "y": 0,
+        "width": 540,
+        "height": 300,
+        "zIndex": -1,
+        "theme": "amber",
+        "customStyles": {
+          "sectionTitleMode": "header",
+          "sectionTitleEdge": "left",
+          "sectionTitleAlign": "center",
+          "borderStyle": "solid",
+          "bgOpacity": 0.08,
+          "headerBgColor": "amber"
+        }
+      },
+      "n-order": {
+        "id": "n-order",
+        "x": 40,
+        "y": 40,
+        "width": 224,
+        "height": 52,
+        "theme": "amber",
+        "customStyles": {
+          "productIcon": "spring",
+          "productIconColored": true
+        }
+      },
+      "n-pay": {
+        "id": "n-pay",
+        "x": 40,
+        "y": 200,
+        "width": 224,
+        "height": 52,
+        "theme": "amber",
+        "customStyles": {
+          "productIcon": "java",
+          "productIconColored": true
+        }
+      },
+      "s-data": {
+        "id": "s-data",
+        "x": 680,
+        "y": 370,
+        "width": 664,
+        "height": 180,
+        "zIndex": -1,
+        "theme": "rose",
+        "customStyles": {
+          "sectionTitleMode": "header",
+          "sectionTitleEdge": "left",
+          "sectionTitleAlign": "center",
+          "borderStyle": "solid",
+          "bgOpacity": 0.06,
+          "headerBgColor": "rose"
+        }
+      },
+      "n-db": {
+        "id": "n-db",
+        "x": 40,
+        "y": 40,
+        "width": 224,
+        "height": 52,
+        "theme": "rose",
+        "customStyles": {
+          "productIcon": "postgresql",
+          "productIconColored": true
+        }
+      },
+      "n-cache": {
+        "id": "n-cache",
+        "x": 364,
+        "y": 40,
+        "width": 224,
+        "height": 52,
+        "theme": "cyan",
+        "customStyles": {
+          "productIcon": "redis",
+          "productIconColored": true
+        }
+      },
+      "n-bus": {
+        "id": "n-bus",
+        "x": 350,
+        "y": 340,
+        "width": 224,
+        "height": 52,
+        "theme": "violet",
+        "customStyles": {
+          "productIcon": "kafka",
+          "productIconColored": true
+        }
+      },
+      "note-arch": {
+        "id": "note-arch",
+        "x": 0,
+        "y": 530,
+        "width": 300,
+        "height": 180
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "particleType": "rest",
+        "showArrow": true
+      },
+      "e2": {
+        "id": "e2",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "particleType": "grpc",
+        "showArrow": true
+      },
+      "e3": {
+        "id": "e3",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "top:50",
+        "particleType": "sql",
+        "showArrow": true
+      },
+      "e4": {
+        "id": "e4",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "top:50",
+        "particleType": "dot",
+        "showArrow": true
+      },
+      "e5": {
+        "id": "e5",
+        "sourceHandle": "left:50",
+        "targetHandle": "right:50",
+        "particleType": "kafka",
+        "showArrow": true
+      },
+      "e6": {
+        "id": "e6",
+        "sourceHandle": "top:50",
+        "targetHandle": "bottom:50",
+        "particleType": "kafka",
+        "showArrow": true
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip",
+        "internalProcess": {
+          "text": "HTTPS \u2192 API Gateway routing",
+          "duration": 2000
+        }
+      },
+      "s2": {
+        "sequenceId": "s2",
+        "duration": 1000,
+        "delay": 0,
+        "animationMode": "roundTrip",
+        "internalProcess": {
+          "text": "gRPC CreateOrder call",
+          "duration": 2000
+        }
+      },
+      "s3": {
+        "sequenceId": "s3",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip",
+        "internalProcess": {
+          "text": "INSERT INTO orders",
+          "duration": 2500
+        }
+      },
+      "s4": {
+        "sequenceId": "s4",
+        "duration": 800,
+        "delay": 0,
+        "animationMode": "roundTrip",
+        "internalProcess": {
+          "text": "SET order:cache",
+          "duration": 1500
+        }
+      },
+      "s5": {
+        "sequenceId": "s5",
+        "duration": 1000,
+        "delay": 0,
+        "animationMode": "normal",
+        "internalProcess": {
+          "text": "Publish OrderCreated event",
+          "duration": 2000
+        }
+      },
+      "s6": {
+        "sequenceId": "s6",
+        "duration": 1000,
+        "delay": 0,
+        "animationMode": "normal",
+        "internalProcess": {
+          "text": "Consume \u2192 ProcessPayment",
+          "duration": 2000
+        }
+      }
+    },
+    "annotations": {
+      "note-arch": {
+        "id": "note-arch",
+        "header": "Architecture Pattern",
+        "body": "Event-Driven Microservices\nwith CQRS separation\n\n\u2022 Sync: gRPC service mesh\n\u2022 Async: Kafka event bus\n\u2022 Cache: Redis for hot data",
+        "style": {
+          "backgroundColor": "#0f172a",
+          "borderColor": "#6366f1",
+          "textColor": "#e2e8f0",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "borderRadius": 10,
+          "opacity": 0.95
+        },
+        "startTime": 0,
+        "endTime": 9999,
+        "alwaysVisible": true
+      }
+    }
+  }
+}

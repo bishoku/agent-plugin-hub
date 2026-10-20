@@ -1,0 +1,10 @@
+{
+  "name": "agent-plugin-hub",
+  "interface": { "displayName": "Agent Plugin Hub" },
+  "plugins": [{
+    "name": "yada",
+    "source": { "source": "local", "path": "./plugins/yada" },
+    "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+    "category": "Productivity"
+  }]
+}

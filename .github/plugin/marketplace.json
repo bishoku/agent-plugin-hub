@@ -1,0 +1,14 @@
+{
+  "name": "agent-plugin-hub",
+  "owner": {
+    "name": "Bishoku"
+  },
+  "plugins": [
+    {
+      "name": "yada",
+      "description": "Create YADA architecture diagrams and flow previews.",
+      "version": "1.0.0",
+      "source": "./plugins/yada"
+    }
+  ]
+}

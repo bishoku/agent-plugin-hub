@@ -1,0 +1,17 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "yada",
+  "version": "1.0.0",
+  "description": "Create editable YADA architecture diagrams and animated flow previews from natural language.",
+  "author": {
+    "name": "Bishoku"
+  },
+  "homepage": "https://bishoku.github.io/yada/",
+  "license": "MIT",
+  "keywords": [
+    "yada",
+    "architecture",
+    "diagrams",
+    "distributed-systems"
+  ]
+}
