@@ -11,11 +11,11 @@ Each plugin is an independent package. Install only what you need.
 
 ## Install and use
 
-Clone this repository, then use one of the options below. Replace `OWNER/REPO`
-with this repository's actual GitHub location after publication.
+Clone [bishoku/agent-plugin-hub](https://github.com/bishoku/agent-plugin-hub),
+then use one of the options below.
 
 ```sh
-git clone https://github.com/OWNER/REPO.git agent-plugin-hub
+git clone https://github.com/bishoku/agent-plugin-hub.git
 cd agent-plugin-hub
 ```
 
@@ -30,7 +30,7 @@ codex plugin marketplace add .
 Or register the published repository:
 
 ```sh
-codex plugin marketplace add OWNER/REPO
+codex plugin marketplace add bishoku/agent-plugin-hub
 ```
 
 Open the desktop plugin directory, select **Agent Plugin Hub**, and install
@@ -47,7 +47,7 @@ See [OpenAI's packaging guide](https://developers.openai.com/plugins/build/plugi
 ### GitHub Copilot CLI
 
 ```sh
-copilot plugin marketplace add OWNER/REPO
+copilot plugin marketplace add bishoku/agent-plugin-hub
 copilot plugin install yada@agent-plugin-hub
 ```
 
@@ -121,7 +121,7 @@ python3 -m venv .venv
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for a new-plugin walkthrough and review
-requirements. [Publishing](docs/publishing.md) explains the first public release.
+requirements. [Publishing](docs/publishing.md) explains how to release updates.
 
 Validation checks package metadata, catalog consistency, and export behavior.
 It does not certify every assistant or replace a real installation and YADA
