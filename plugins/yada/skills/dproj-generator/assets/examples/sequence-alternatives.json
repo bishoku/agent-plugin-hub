@@ -1,0 +1,270 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "user",
+        "type": "client",
+        "name": "Client"
+      },
+      {
+        "id": "result",
+        "type": "section",
+        "name": "Result alternatives",
+        "properties": {
+          "fragmentType": "alt",
+          "sequenceIds": [
+            "s2",
+            "s3"
+          ]
+        }
+      },
+      {
+        "id": "service",
+        "type": "server",
+        "name": "Checkout",
+        "parentId": "result"
+      },
+      {
+        "id": "provider",
+        "type": "external_api",
+        "name": "Payment",
+        "parentId": "result"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "user",
+        "targetId": "service",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Checkout"
+      },
+      {
+        "id": "e2",
+        "sourceId": "service",
+        "targetId": "provider",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Accepted"
+      },
+      {
+        "id": "e3",
+        "sourceId": "provider",
+        "targetId": "service",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Declined"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": false,
+        "isRoundTrip": false
+      },
+      {
+        "id": "s2",
+        "stepNumber": 2,
+        "edgeId": "e2",
+        "isAsync": false,
+        "isRoundTrip": false
+      },
+      {
+        "id": "s3",
+        "stepNumber": 3,
+        "edgeId": "e3",
+        "isAsync": false,
+        "isRoundTrip": false
+      }
+    ],
+    "sequenceDiagram": {
+      "version": 1,
+      "title": "Checkout alternatives",
+      "autonumber": {
+        "start": 1,
+        "increment": 1
+      },
+      "events": [
+        {
+          "type": "message",
+          "sequenceId": "s1"
+        },
+        {
+          "type": "activation",
+          "participantId": "service",
+          "active": true
+        },
+        {
+          "type": "fragment",
+          "sectionId": "result",
+          "kind": "alt",
+          "label": "Result",
+          "branches": [
+            {
+              "label": "Accepted",
+              "events": [
+                {
+                  "type": "message",
+                  "sequenceId": "s2"
+                }
+              ]
+            },
+            {
+              "label": "Declined",
+              "divider": "else",
+              "events": [
+                {
+                  "type": "message",
+                  "sequenceId": "s3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "activation",
+          "participantId": "service",
+          "active": false
+        }
+      ]
+    }
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 60,
+        "y": 60
+      },
+      "gridVisible": false,
+      "renderStyle": "clean"
+    },
+    "layoutNodes": {
+      "user": {
+        "id": "user",
+        "x": 0,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "indigo"
+      },
+      "result": {
+        "id": "result",
+        "x": 350,
+        "y": -70,
+        "width": 650,
+        "height": 400,
+        "theme": "slate",
+        "customStyles": {
+          "sectionTitleMode": "header",
+          "sectionTitleEdge": "top",
+          "borderStyle": "solid",
+          "bgOpacity": 0.06
+        }
+      },
+      "service": {
+        "id": "service",
+        "x": 50,
+        "y": 70,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "provider": {
+        "id": "provider",
+        "x": 375,
+        "y": 70,
+        "width": 224,
+        "height": 64,
+        "theme": "slate"
+      },
+      "note-0": {
+        "id": "note-0",
+        "x": 0,
+        "y": 400,
+        "width": 340,
+        "height": 160
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e2": {
+        "id": "e2",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e3": {
+        "id": "e3",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "bottom:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "dashed",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50,
+        "color": "#e11d48"
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "normal"
+      },
+      "s2": {
+        "sequenceId": "s2",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "normal"
+      },
+      "s3": {
+        "sequenceId": "s3",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "normal"
+      }
+    },
+    "annotations": {
+      "note-0": {
+        "id": "note-0",
+        "header": "Sequence illustration",
+        "body": "Switch to sequence view. Branches describe alternatives; playback does not evaluate conditions.",
+        "style": {
+          "backgroundColor": "#0f172a",
+          "borderColor": "#6366f1",
+          "textColor": "#e2e8f0",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "borderRadius": 8,
+          "opacity": 1
+        },
+        "startTime": 0,
+        "endTime": 20000,
+        "alwaysVisible": true
+      }
+    }
+  }
+}

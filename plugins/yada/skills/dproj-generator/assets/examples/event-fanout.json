@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "producer",
+        "type": "server",
+        "name": "Order Service"
+      },
+      {
+        "id": "bus",
+        "type": "event_bus",
+        "name": "Kafka"
+      },
+      {
+        "id": "billing",
+        "type": "worker",
+        "name": "Billing Worker"
+      },
+      {
+        "id": "notify",
+        "type": "worker",
+        "name": "Notification Worker"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "producer",
+        "targetId": "bus",
+        "isAsync": true,
+        "protocol": "Kafka",
+        "description": "OrderCreated"
+      },
+      {
+        "id": "e2",
+        "sourceId": "bus",
+        "targetId": "billing",
+        "isAsync": true,
+        "protocol": "Kafka",
+        "description": "Consume event"
+      },
+      {
+        "id": "e3",
+        "sourceId": "bus",
+        "targetId": "notify",
+        "isAsync": true,
+        "protocol": "Kafka",
+        "description": "Consume event"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": true,
+        "isRoundTrip": false
+      },
+      {
+        "id": "s2",
+        "stepNumber": 2,
+        "edgeId": "e2",
+        "isAsync": true,
+        "isRoundTrip": false
+      },
+      {
+        "id": "s3",
+        "stepNumber": 2,
+        "edgeId": "e3",
+        "isAsync": true,
+        "isRoundTrip": false
+      }
+    ]
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 60,
+        "y": 60
+      },
+      "gridVisible": false,
+      "renderStyle": "clean"
+    },
+    "layoutNodes": {
+      "producer": {
+        "id": "producer",
+        "x": 0,
+        "y": 180,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "bus": {
+        "id": "bus",
+        "x": 350,
+        "y": 180,
+        "width": 224,
+        "height": 64,
+        "theme": "violet",
+        "customStyles": {
+          "productIcon": "kafka",
+          "productIconColored": true
+        }
+      },
+      "billing": {
+        "id": "billing",
+        "x": 750,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "notify": {
+        "id": "notify",
+        "x": 750,
+        "y": 360,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "note-0": {
+        "id": "note-0",
+        "x": 0,
+        "y": 410,
+        "width": 340,
+        "height": 160
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "dashed",
+        "arrowEnd": "triangle",
+        "particleType": "kafka",
+        "labelPosition": 50
+      },
+      "e2": {
+        "id": "e2",
+        "sourceHandle": "top:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "dashed",
+        "arrowEnd": "triangle",
+        "particleType": "kafka",
+        "labelPosition": 50
+      },
+      "e3": {
+        "id": "e3",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "dashed",
+        "arrowEnd": "triangle",
+        "particleType": "kafka",
+        "labelPosition": 50
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "normal"
+      },
+      "s2": {
+        "sequenceId": "s2",
+        "duration": 1200,
+        "delay": 1200,
+        "animationMode": "normal"
+      },
+      "s3": {
+        "sequenceId": "s3",
+        "duration": 1200,
+        "delay": 1200,
+        "animationMode": "normal"
+      }
+    },
+    "annotations": {
+      "note-0": {
+        "id": "note-0",
+        "header": "Delivery",
+        "body": "Dashed = async. Consumers start after publish transit; no delivery guarantee is implied.",
+        "style": {
+          "backgroundColor": "#0f172a",
+          "borderColor": "#6366f1",
+          "textColor": "#e2e8f0",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "borderRadius": 8,
+          "opacity": 1
+        },
+        "startTime": 0,
+        "endTime": 20000,
+        "alwaysVisible": true
+      }
+    }
+  }
+}

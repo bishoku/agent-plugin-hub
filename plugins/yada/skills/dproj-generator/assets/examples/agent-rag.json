@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "user",
+        "type": "client",
+        "name": "User"
+      },
+      {
+        "id": "agent",
+        "type": "ai_agent",
+        "name": "Knowledge Agent"
+      },
+      {
+        "id": "search",
+        "type": "search",
+        "name": "Vector Search"
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "name": "Language Model"
+      },
+      {
+        "id": "storage",
+        "type": "storage",
+        "name": "Document Store"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "user",
+        "targetId": "agent",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Ask question"
+      },
+      {
+        "id": "e2",
+        "sourceId": "agent",
+        "targetId": "search",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Retrieve context"
+      },
+      {
+        "id": "e3",
+        "sourceId": "search",
+        "targetId": "storage",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Load passages"
+      },
+      {
+        "id": "e4",
+        "sourceId": "agent",
+        "targetId": "llm",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Generate grounded answer"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s2",
+        "stepNumber": 2,
+        "edgeId": "e2",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s3",
+        "stepNumber": 3,
+        "edgeId": "e3",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s4",
+        "stepNumber": 4,
+        "edgeId": "e4",
+        "isAsync": false,
+        "isRoundTrip": true
+      }
+    ]
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 60,
+        "y": 60
+      },
+      "gridVisible": false,
+      "renderStyle": "clean"
+    },
+    "layoutNodes": {
+      "user": {
+        "id": "user",
+        "x": 0,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "indigo"
+      },
+      "agent": {
+        "id": "agent",
+        "x": 350,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "search": {
+        "id": "search",
+        "x": 700,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "rose"
+      },
+      "llm": {
+        "id": "llm",
+        "x": 350,
+        "y": 230,
+        "width": 224,
+        "height": 64,
+        "theme": "violet"
+      },
+      "storage": {
+        "id": "storage",
+        "x": 1050,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "rose"
+      },
+      "note-0": {
+        "id": "note-0",
+        "x": 0,
+        "y": 430,
+        "width": 340,
+        "height": 160
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e2": {
+        "id": "e2",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e3": {
+        "id": "e3",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e4": {
+        "id": "e4",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "top:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s2": {
+        "sequenceId": "s2",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s3": {
+        "sequenceId": "s3",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s4": {
+        "sequenceId": "s4",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      }
+    },
+    "annotations": {
+      "note-0": {
+        "id": "note-0",
+        "header": "Assumptions",
+        "body": "Provider-neutral RAG. Retrieval precedes generation; citations depend on the implementation.",
+        "style": {
+          "backgroundColor": "#0f172a",
+          "borderColor": "#6366f1",
+          "textColor": "#e2e8f0",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "borderRadius": 8,
+          "opacity": 1
+        },
+        "startTime": 0,
+        "endTime": 20000,
+        "alwaysVisible": true
+      }
+    }
+  }
+}

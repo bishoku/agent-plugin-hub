@@ -1,66 +1,59 @@
 ---
 name: dproj-generator
-description: Generate or edit YADA architecture diagrams as .dproj project files or shareable simulation URLs. Use for YADA diagrams, distributed system flows, SAGA, CQRS, event sourcing, or microservice visualizations intended for YADA.
+description: Create or edit YADA architecture and sequence diagrams, animated flows, .dproj projects, and preview links.
 ---
 
-# YADA diagram generator
+# YADA diagram authoring
 
-Turn an architecture description into an editable YADA diagram with flow playback.
-Use Python 3.10 or newer; bundled scripts require only the standard library.
-Resolve paths relative to this skill's installed directory. Write results to the
-user's workspace, never into the installed plugin.
+Produce editable, readable diagrams with faithful flow playback. Use the user's
+language and terminology. Python 3.10+; bundled tools use only the standard library.
+Resolve tool paths from this installed skill; write outputs to the user's workspace.
 
 ## Workflow
 
-1. Identify components, domain boundaries, protocols, and the ordered/parallel flow.
-   Preserve supplied names and distinguish architectural assumptions from facts.
-2. Read [the format and layout reference](references/diagram-format.md) before
-   authoring JSON. Use [the example diagram](assets/example-diagram.json) and
-   [workspace](assets/example-workspace.json) as working examples when useful.
-3. Build `diagram.json` with schema version 2, `logicalData`, and `visualData`.
-   Use stable IDs when editing. Keep existing content outside the requested change.
-4. Choose a project file by default. Honor an explicit preview URL request, or
-   produce both if requested. A preview contains the diagram in its URL; anyone
-   receiving the URL can inspect its content. Do not add credentials to diagrams.
-5. Run the selected exporter below, review any repair messages, and correct
-   validation failures. The scripts apply legacy repairs in memory; input JSON
-   remains unchanged. Repairs do not replace a layout review.
-6. Return a link to the generated artifact, describe the flow and assumptions,
-   and explain how to open it. Claim visual verification only if actually done.
+1. Establish the audience, system boundaries and scenario from the request. Separate
+   supplied facts from assumptions; do not invent technology just to add an icon.
+   Choose overview, detailed flow, or sequence; split crowded scenarios when useful.
+2. For new diagrams read [format](references/diagram-format.md) and
+   [design](references/visual-design.md). For narrow edits read only the relevant
+   section and preserve IDs, unknown fields, components and unrelated content.
+3. Build both logical and visual layers. For a starting point select one
+   [example](references/examples.md), not the whole collection. Load conditional guidance only as needed:
 
-## Export a project
+   | Need | Reference |
+   |---|---|
+   | Animated calls, events, parallelism, compensation | [Playback](references/playback.md) |
+   | Sequence view, conditions, loops, activations | [Sequence](references/sequence.md) |
+   | Custom components, freeform, drawing overlays | [Advanced visuals](references/advanced-visuals.md) |
+   | Import/edit, export, preview, visual QA | [Delivery](references/delivery.md) |
 
-Create `workspace.json` with a name, description, virtual path, and ISO timestamp.
-Run (replace `SKILL_DIR` and file paths with actual paths):
+4. Run `python3 SKILL_DIR/scripts/check_diagram.py diagram.json` (add
+   `--components-dir components` for custom components). Fix errors; review layout
+   warnings. This checks data and geometry, not actual rendering or playback.
+5. Export by default:
+   `python3 SKILL_DIR/scripts/pack_dproj.py output.dproj workspace.json diagram.json`.
+   Add `--components-dir components` when used. New output is strict; `--repair`
+   is an explicit legacy migration option, not a substitute for fixing authorship.
+6. Inspect in YADA when available, following delivery's QA procedure. Return the
+   artifact, a brief flow/assumption summary and what was actually verified.
+   If rendering is unavailable, state that limitation; never claim visual QA.
 
-```sh
-python3 SKILL_DIR/scripts/pack_dproj.py output.dproj workspace.json diagram.json
-```
+## Context economy
 
-Open the file with YADA's project import. A `.dproj` is a ZIP containing
-`workspace.json` and `diagram.json`; it is not a standalone rendered image.
+- Read a reference once, only when relevant. Do not load the whole catalog or all
+  examples. `scripts/catalog.py --icon postgres` finds icon IDs; `--types` lists types.
+- Execute helpers without reading their source unless diagnosing a failure.
+- Build repeated structures with local loops/shared style dictionaries. Serialize
+  complete JSON to disk; do not echo it, SVG caches, base64 or compressed URLs.
+- For edits use `scripts/unpack_dproj.py input.dproj edit-dir`, then modify only
+  affected records. Do not regenerate unchanged diagrams to make a small edit.
+- Tool summaries are bounded; use `check_diagram.py --report report.json` for full
+  findings. Inspect only failing IDs. Keep artifact internals out of the response.
 
-## Export a preview
+## Invariants
 
-```sh
-python3 SKILL_DIR/scripts/build_share_url.py diagram.json \
-  --name "Order Processing" --description "Order flow with Kafka events" \
-  --output-md preview.md
-```
-
-The script writes a clickable YADA link into `preview.md`. Link to that file;
-avoid reading or echoing the compressed URL into the conversation. No upload or
-MCP server is required to generate it. Opening it loads the hosted YADA app.
-If the URL exceeds 32,000 characters, export a `.dproj` instead and explain why.
-
-## Final checks
-
-- Every logical node/edge has matching visual data; sequence references exist.
-- Annotations have layout entries and never occur as logical nodes.
-- Children use parent-relative coordinates; section bounds include padding.
-- Step delays are local, not accumulated; parallel steps share a step number.
-- Match handles to layout direction and particles to protocols.
-- Use readable spacing and role-based themes, with icons for known technology.
-
-The optional YADA architect agent uses this same workflow. This skill does not
-require a particular assistant, the Diagramer source checkout, or an API key.
+Annotations are visual-only; edges cannot terminate on sections or notes. Child
+positions are parent-relative; edge waypoints are canvas coordinates. Each sequence
+has its own timeline. Async steps do not automatically wait for event delivery.
+Use features that clarify the scenario; completeness does not mean decoration.
+A simulation illustrates behavior, not measured performance or executable logic.

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "device",
+        "type": "custom-comp-device",
+        "name": "Edge Device"
+      },
+      {
+        "id": "api",
+        "type": "gateway",
+        "name": "Ingestion API"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "device",
+        "targetId": "api",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Upload telemetry"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": false,
+        "isRoundTrip": false
+      }
+    ]
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 60,
+        "y": 60
+      },
+      "gridVisible": false,
+      "renderStyle": "clean"
+    },
+    "layoutNodes": {
+      "device": {
+        "id": "device",
+        "x": 0,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "slate"
+      },
+      "api": {
+        "id": "api",
+        "x": 350,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "emerald"
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "normal"
+      }
+    },
+    "annotations": {}
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "platform",
+        "type": "section",
+        "name": "Platform"
+      },
+      {
+        "id": "core",
+        "type": "section",
+        "name": "Core Services",
+        "parentId": "platform"
+      },
+      {
+        "id": "gateway",
+        "type": "gateway",
+        "name": "Gateway",
+        "parentId": "core"
+      },
+      {
+        "id": "service",
+        "type": "server",
+        "name": "Order Service",
+        "parentId": "core"
+      },
+      {
+        "id": "store",
+        "type": "database",
+        "name": "PostgreSQL",
+        "parentId": "core"
+      },
+      {
+        "id": "auth",
+        "type": "auth",
+        "name": "Identity Provider",
+        "parentId": "platform"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "gateway",
+        "targetId": "service",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Create order"
+      },
+      {
+        "id": "e2",
+        "sourceId": "service",
+        "targetId": "store",
+        "isAsync": false,
+        "protocol": "SQL",
+        "description": "Store order"
+      },
+      {
+        "id": "e3",
+        "sourceId": "gateway",
+        "targetId": "auth",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Validate identity"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s2",
+        "stepNumber": 2,
+        "edgeId": "e2",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s3",
+        "stepNumber": 1,
+        "edgeId": "e3",
+        "isAsync": false,
+        "isRoundTrip": true
+      }
+    ]
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 60,
+        "y": 60
+      },
+      "gridVisible": false,
+      "renderStyle": "clean"
+    },
+    "layoutNodes": {
+      "platform": {
+        "id": "platform",
+        "x": 0,
+        "y": 0,
+        "width": 1120,
+        "height": 570,
+        "theme": "slate",
+        "customStyles": {
+          "sectionTitleMode": "header",
+          "sectionTitleEdge": "top",
+          "borderStyle": "solid",
+          "bgOpacity": 0.06
+        }
+      },
+      "core": {
+        "id": "core",
+        "x": 50,
+        "y": 80,
+        "width": 650,
+        "height": 420,
+        "theme": "slate",
+        "customStyles": {
+          "sectionTitleMode": "header",
+          "sectionTitleEdge": "top",
+          "borderStyle": "solid",
+          "bgOpacity": 0.06
+        }
+      },
+      "gateway": {
+        "id": "gateway",
+        "x": 50,
+        "y": 80,
+        "width": 224,
+        "height": 64,
+        "theme": "emerald"
+      },
+      "service": {
+        "id": "service",
+        "x": 375,
+        "y": 80,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "store": {
+        "id": "store",
+        "x": 375,
+        "y": 270,
+        "width": 224,
+        "height": 64,
+        "theme": "rose",
+        "customStyles": {
+          "productIcon": "postgresql",
+          "productIconColored": true
+        }
+      },
+      "auth": {
+        "id": "auth",
+        "x": 810,
+        "y": 160,
+        "width": 224,
+        "height": 64,
+        "theme": "emerald"
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e2": {
+        "id": "e2",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "top:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "sql",
+        "labelPosition": 50
+      },
+      "e3": {
+        "id": "e3",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "bottom:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50,
+        "waypoints": [
+          {
+            "x": 212,
+            "y": 540
+          },
+          {
+            "x": 922,
+            "y": 540
+          }
+        ]
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s2": {
+        "sequenceId": "s2",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s3": {
+        "sequenceId": "s3",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      }
+    },
+    "annotations": {}
+  }
+}

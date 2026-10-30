@@ -1,0 +1,44 @@
+{
+  "componentId": "custom-comp-device",
+  "name": "Edge Device",
+  "category": "Domain",
+  "dimensions": {
+    "width": 224,
+    "height": 64
+  },
+  "createdAt": "2026-10-30T00:00:00Z",
+  "layers": [
+    {
+      "id": "body",
+      "type": "rectangle",
+      "name": "Body",
+      "zIndex": 0,
+      "x": 0,
+      "y": 0,
+      "width": 224,
+      "height": 64,
+      "style": {
+        "fill": "#e0e7ff",
+        "stroke": "#6366f1",
+        "strokeWidth": 2,
+        "rx": 12
+      }
+    },
+    {
+      "id": "label",
+      "type": "text",
+      "name": "Label",
+      "zIndex": 1,
+      "x": 16,
+      "y": 18,
+      "width": 192,
+      "height": 28,
+      "style": {
+        "fill": "#312e81",
+        "fontSize": 18,
+        "textAlign": "center"
+      },
+      "content": "Edge Device"
+    }
+  ]
+}

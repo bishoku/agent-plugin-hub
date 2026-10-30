@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "order",
+        "type": "server",
+        "name": "Order Service"
+      },
+      {
+        "id": "stock",
+        "type": "server",
+        "name": "Inventory"
+      },
+      {
+        "id": "payment",
+        "type": "external_api",
+        "name": "Payment Provider"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "order",
+        "targetId": "stock",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Reserve inventory"
+      },
+      {
+        "id": "e2",
+        "sourceId": "order",
+        "targetId": "payment",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Payment declined"
+      },
+      {
+        "id": "e3",
+        "sourceId": "order",
+        "targetId": "stock",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Release reservation"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s2",
+        "stepNumber": 2,
+        "edgeId": "e2",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s3",
+        "stepNumber": 3,
+        "edgeId": "e3",
+        "isAsync": false,
+        "isRoundTrip": true
+      }
+    ]
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 60,
+        "y": 60
+      },
+      "gridVisible": false,
+      "renderStyle": "clean"
+    },
+    "layoutNodes": {
+      "order": {
+        "id": "order",
+        "x": 0,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "stock": {
+        "id": "stock",
+        "x": 400,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "payment": {
+        "id": "payment",
+        "x": 800,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "slate"
+      },
+      "note-0": {
+        "id": "note-0",
+        "x": 750,
+        "y": 210,
+        "width": 340,
+        "height": 160
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e2": {
+        "id": "e2",
+        "sourceHandle": "top:50",
+        "targetHandle": "top:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50,
+        "color": "#e11d48",
+        "waypoints": [
+          {
+            "x": 112,
+            "y": -140
+          },
+          {
+            "x": 912,
+            "y": -140
+          }
+        ]
+      },
+      "e3": {
+        "id": "e3",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "bottom:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "dashed",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50,
+        "color": "#e11d48",
+        "waypoints": [
+          {
+            "x": 112,
+            "y": 180
+          },
+          {
+            "x": 512,
+            "y": 180
+          }
+        ]
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s2": {
+        "sequenceId": "s2",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s3": {
+        "sequenceId": "s3",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      }
+    },
+    "annotations": {
+      "note-0": {
+        "id": "note-0",
+        "header": "Compensation path",
+        "body": "Assumption: payment fails after inventory reservation. Dashed red = compensating action.",
+        "style": {
+          "backgroundColor": "#0f172a",
+          "borderColor": "#6366f1",
+          "textColor": "#e2e8f0",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "borderRadius": 8,
+          "opacity": 1
+        },
+        "startTime": 0,
+        "endTime": 20000,
+        "alwaysVisible": true
+      }
+    }
+  }
+}

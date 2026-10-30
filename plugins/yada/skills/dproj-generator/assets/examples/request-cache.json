@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 2,
+  "logicalData": {
+    "schemaVersion": 2,
+    "nodes": [
+      {
+        "id": "web",
+        "type": "client",
+        "name": "Web Client"
+      },
+      {
+        "id": "api",
+        "type": "gateway",
+        "name": "API Gateway"
+      },
+      {
+        "id": "svc",
+        "type": "server",
+        "name": "Order Service"
+      },
+      {
+        "id": "cache",
+        "type": "cache",
+        "name": "Redis"
+      },
+      {
+        "id": "db",
+        "type": "database",
+        "name": "PostgreSQL"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "sourceId": "web",
+        "targetId": "api",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "Create order"
+      },
+      {
+        "id": "e2",
+        "sourceId": "api",
+        "targetId": "svc",
+        "isAsync": false,
+        "protocol": "HTTP",
+        "description": "POST /orders"
+      },
+      {
+        "id": "e3",
+        "sourceId": "svc",
+        "targetId": "cache",
+        "isAsync": false,
+        "protocol": "Redis",
+        "description": "Check idempotency key"
+      },
+      {
+        "id": "e4",
+        "sourceId": "svc",
+        "targetId": "db",
+        "isAsync": false,
+        "protocol": "SQL",
+        "description": "INSERT order"
+      }
+    ],
+    "sequences": [
+      {
+        "id": "s1",
+        "stepNumber": 1,
+        "edgeId": "e1",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s2",
+        "stepNumber": 2,
+        "edgeId": "e2",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s3",
+        "stepNumber": 3,
+        "edgeId": "e3",
+        "isAsync": false,
+        "isRoundTrip": true
+      },
+      {
+        "id": "s4",
+        "stepNumber": 4,
+        "edgeId": "e4",
+        "isAsync": false,
+        "isRoundTrip": true
+      }
+    ]
+  },
+  "visualData": {
+    "canvas": {
+      "zoom": 0.85,
+      "pan": {
+        "x": 60,
+        "y": 60
+      },
+      "gridVisible": false,
+      "renderStyle": "clean"
+    },
+    "layoutNodes": {
+      "web": {
+        "id": "web",
+        "x": 0,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "indigo"
+      },
+      "api": {
+        "id": "api",
+        "x": 350,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "emerald"
+      },
+      "svc": {
+        "id": "svc",
+        "x": 700,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "amber"
+      },
+      "cache": {
+        "id": "cache",
+        "x": 1050,
+        "y": 0,
+        "width": 224,
+        "height": 64,
+        "theme": "cyan",
+        "customStyles": {
+          "productIcon": "redis",
+          "productIconColored": true
+        }
+      },
+      "db": {
+        "id": "db",
+        "x": 700,
+        "y": 230,
+        "width": 224,
+        "height": 64,
+        "theme": "rose",
+        "customStyles": {
+          "productIcon": "postgresql",
+          "productIconColored": true
+        }
+      },
+      "note-0": {
+        "id": "note-0",
+        "x": 0,
+        "y": 230,
+        "width": 340,
+        "height": 160
+      }
+    },
+    "layoutEdges": {
+      "e1": {
+        "id": "e1",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e2": {
+        "id": "e2",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "rest",
+        "labelPosition": 50
+      },
+      "e3": {
+        "id": "e3",
+        "sourceHandle": "right:50",
+        "targetHandle": "left:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "dot",
+        "labelPosition": 50
+      },
+      "e4": {
+        "id": "e4",
+        "sourceHandle": "bottom:50",
+        "targetHandle": "top:50",
+        "connectionType": "smoothstep",
+        "strokeWidth": 2,
+        "lineStyle": "solid",
+        "arrowEnd": "triangle",
+        "particleType": "sql",
+        "labelPosition": 50
+      }
+    },
+    "timelines": {
+      "s1": {
+        "sequenceId": "s1",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s2": {
+        "sequenceId": "s2",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s3": {
+        "sequenceId": "s3",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip"
+      },
+      "s4": {
+        "sequenceId": "s4",
+        "duration": 1200,
+        "delay": 0,
+        "animationMode": "roundTrip",
+        "internalProcess": {
+          "text": "Persist order atomically",
+          "duration": 1800
+        }
+      }
+    },
+    "annotations": {
+      "note-0": {
+        "id": "note-0",
+        "header": "Scope",
+        "body": "Cache miss path; timings illustrate the flow.",
+        "style": {
+          "backgroundColor": "#0f172a",
+          "borderColor": "#6366f1",
+          "textColor": "#e2e8f0",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "borderRadius": 8,
+          "opacity": 1
+        },
+        "startTime": 0,
+        "endTime": 20000,
+        "alwaysVisible": true
+      }
+    }
+  }
+}

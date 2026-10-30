@@ -12,7 +12,7 @@ The script writes the clickable URL to a markdown file (default: generated_link.
 in the current working directory) and prints only a short confirmation to stdout.
 This avoids sending the full compressed URL back through LLM context, saving tokens.
 
-Auto-repairs from pack_dproj.py are applied before compression.
+Legacy repairs are opt-in with --repair; strict validation is the default.
 If the resulting URL exceeds 32,000 characters, an error message is printed
 suggesting the user fall back to .dproj export instead.
 """
@@ -29,12 +29,7 @@ from datetime import datetime, timezone
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 
-from pack_dproj import (
-    repair_handles,
-    repair_section_coordinates,
-    repair_schema_v2,
-    validate_diagram,
-)
+from pack_dproj import prepare_diagram
 
 # ─── Embedded LZString compressToEncodedURIComponent (Pure Python) ─────────────
 # Port of lz-string v1.5.0 by pieroxy (MIT License).
@@ -273,7 +268,13 @@ def main():
         default=None,
         help=f"Path for the output markdown file (default: ./{DEFAULT_OUTPUT_FILENAME})",
     )
+    parser.add_argument('--repair', action='store_true', help='Explicit legacy migration')
+    parser.add_argument('--base-url', default=BASE_URL, help='Target YADA viewer URL')
     args = parser.parse_args()
+    from urllib.parse import urlsplit
+    parsed = urlsplit(args.base_url)
+    if parsed.scheme not in ('http','https') or not parsed.netloc or parsed.fragment or parsed.query:
+        parser.error('--base-url must be an http(s) viewer URL without query or fragment')
 
     diagram_path = args.diagram
     output_path = args.output_md or os.path.join(os.getcwd(), DEFAULT_OUTPUT_FILENAME)
@@ -289,32 +290,12 @@ def main():
             print(f"ERROR: {diagram_path} is not valid JSON: {e}")
             sys.exit(1)
 
-    # Validate basic structure
-    if "logicalData" not in diagram_data:
-        print("ERROR: diagram.json missing 'logicalData' object")
-        sys.exit(1)
-    if "visualData" not in diagram_data:
-        print("ERROR: diagram.json missing 'visualData' object")
-        sys.exit(1)
-
-    # ── Auto-repairs (same as pack_dproj.py) ───────────────────────────────
-    all_repairs = []
-    all_repairs.extend(repair_section_coordinates(diagram_data))
-    all_repairs.extend(repair_schema_v2(diagram_data))
-    all_repairs.extend(repair_handles(diagram_data))
-
-    if all_repairs:
-        print(f"Auto-repaired {len(all_repairs)} issue(s):", file=sys.stderr)
-        for r in all_repairs:
-            print(r, file=sys.stderr)
-        print(file=sys.stderr)
-
-    # ── Validate ───────────────────────────────────────────────────────────
-    errors = validate_diagram(diagram_data)
+    diagram_data, repairs, errors = prepare_diagram(diagram_data, args.repair)
+    if not errors and any(n['type'].startswith('custom-comp-') for n in diagram_data['logicalData']['nodes']):
+        errors.append('Custom components require .dproj packaging; inline preview does not load their library.')
+    for repair in repairs[:20]: print('Repair: ' + repair, file=sys.stderr)
     if errors:
-        print(f"Validation found {len(errors)} error(s):", file=sys.stderr)
-        for err in errors:
-            print(f"  ✗ {err}", file=sys.stderr)
+        print('Validation failed:\n' + '\n'.join(errors[:20]), file=sys.stderr)
         sys.exit(1)
 
     # ── Build share payload ────────────────────────────────────────────────
@@ -327,7 +308,7 @@ def main():
     # ── Compress & build URL ───────────────────────────────────────────────
     json_str = json.dumps(share_payload, ensure_ascii=False, separators=(",", ":"))
     compressed = compress_to_encoded_uri_component(json_str)
-    url = f"{BASE_URL}#share={compressed}"
+    url = f"{args.base_url}#share={compressed}"
 
     ld = diagram_data["logicalData"]
     n_nodes = len(ld.get("nodes", []))
